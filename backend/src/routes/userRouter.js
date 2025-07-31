@@ -2,11 +2,11 @@ const express = require("express");
 const User = require("../models/user");
 const { validateSignupData, validateLoginData } = require("../utils/validate");
 const bcrypt = require("bcrypt");
-const authRouter = express.Router();
+const userRouter = express.Router();
 const jwt = require("jsonwebtoken");
 
 // POST /signup API
-authRouter.post("/signup", async (req, res) => {
+userRouter.post("/signup", async (req, res) => {
   try {
     // Validate Data
     const data = req.body;
@@ -25,7 +25,7 @@ authRouter.post("/signup", async (req, res) => {
 });
 
 // POST /login API
-authRouter.post("/login", async (req, res) => {
+userRouter.post("/login", async (req, res) => {
   try {
     validateLoginData(req.body);
 
@@ -53,7 +53,7 @@ authRouter.post("/login", async (req, res) => {
       });
 
       res.json({
-        message: "Login Successful!!",
+        message: "Logged in Successfully",
         userData: {
           _id,
           firstName,
@@ -67,8 +67,13 @@ authRouter.post("/login", async (req, res) => {
       throw new Error("Wrong Email and Password");
     }
   } catch (err) {
-    res.status(400).json({message: err.message});
+    res.status(400).json({ message: err.message });
   }
 });
 
-module.exports = authRouter;
+userRouter.post("/logout", (req, res) => {
+  res.clearCookie("token");
+  res.json({message: "Logged out successfully"})
+});
+
+module.exports = userRouter;
