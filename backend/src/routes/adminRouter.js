@@ -10,9 +10,7 @@ const adminRouter = express.Router();
 adminRouter.post("/user/create", userAuth, adminAuth, async (req, res) => {
   try {
     const data = req.body;
-    console.log(data, req.isAdmin);
     const sanitizedData = await validateSignupData(data, req.isAdmin);
-    console.log(sanitizedData);
 
     const user = new User(sanitizedData);
     const userData = await user.save();
