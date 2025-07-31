@@ -3,6 +3,7 @@ const { connetDB } = require("./config/database");
 const userRouter = require("./routes/userRouter");
 const cookieParser = require("cookie-parser");
 const adminRouter = require("./routes/adminRouter");
+const seedAdmin = require("./utils/seedAdmin");
 
 const app = express();
 
@@ -15,7 +16,7 @@ app.use("/", adminRouter);
 connetDB()
   .then(() => {
     console.log("Connection established!");
-
+    seedAdmin();
     app.listen(3000, () => {
       console.log("Server is running on port 3000");
     });
