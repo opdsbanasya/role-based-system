@@ -2,6 +2,7 @@ const express = require("express");
 const { connetDB } = require("./config/database");
 const userRouter = require("./routes/userRouter");
 const cookieParser = require("cookie-parser");
+const adminRouter = require("./routes/adminRouter");
 
 const app = express();
 
@@ -9,6 +10,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/", userRouter);
+app.use("/", adminRouter);
 
 connetDB()
   .then(() => {
