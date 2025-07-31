@@ -22,4 +22,10 @@ const validateSignupData = async (data) => {
   return data;
 };
 
-module.exports = { validateSignupData };
+const validateLoginData = (data) => {
+  if (!validator.isEmail(data.email)) {
+    throw new Error("Invalid Email");
+  }
+};
+
+module.exports = { validateSignupData, validateLoginData };
