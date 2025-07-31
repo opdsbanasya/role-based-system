@@ -6,7 +6,7 @@ const User = require("../models/user");
 
 const adminRouter = express.Router();
 
-adminRouter.post("/create/user", userAuth, adminAuth, async (req, res) => {
+adminRouter.post("/user/create", userAuth, adminAuth, async (req, res) => {
   try {
     const data = req.body;
     console.log(data, req.isAdmin);
@@ -16,7 +16,19 @@ adminRouter.post("/create/user", userAuth, adminAuth, async (req, res) => {
     const user = new User(sanitizedData);
     const userData = await user.save();
 
-    res.json({message: "User Created Successfully"});
+    res.json({ message: "User Created Successfully" });
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+adminRouter.delete("/user/delete", userAuth, adminAuth, async (req, res) => {
+  try {
+    const userId = req.body._id;
+
+    await User.deleteOne({ _id: userId });
+
+    res.json({ message: "User Deleted" });
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
