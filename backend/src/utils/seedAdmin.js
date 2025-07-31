@@ -16,8 +16,6 @@ const seedAdmin = async () => {
         await adminUser.save();
         console.log("Default admin created")
     } else {
-        console.log(defaultAdminExists);
-        
         console.log("Default admin is alredy exists")
     }
 };
