@@ -2,7 +2,7 @@ const validator = require("validator");
 const bcrypt = require("bcrypt");
 const User = require("../models/user");
 
-const validateSignupData = async (data) => {
+const validateSignupData = async (data, isAdmin = false) => {
   if (!validator.isEmail(data.email)) {
     throw new Error("Invalid email");
   }
@@ -12,7 +12,7 @@ const validateSignupData = async (data) => {
     throw new Error("Email already exists");
   }
 
-  if (data?.role) {
+  if (data?.role && !isAdmin) {
     throw new Error("You are not allowed to assign roles");
   }
 
