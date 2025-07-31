@@ -1,9 +1,8 @@
 const adminAuth = (req, res, next) => {
   if (req.user.role != "admin") {
-    return res.status(401).json("Unauthorized");
-  }
-  req.isAdmin = true;
-  
+    return res.status(401).json({ message: "Unauthorized User" });
+  } else req.isAdmin = true;
+
   next();
 };
 
