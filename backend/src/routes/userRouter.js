@@ -1,9 +1,14 @@
 const express = require("express");
 const User = require("../models/user");
-const { validateSignupData, validateLoginData } = require("../utils/validate");
+const {
+  validateSignupData,
+  validateLoginData,
+  validateUpdatePassword,
+} = require("../utils/validate");
 const bcrypt = require("bcrypt");
 const userRouter = express.Router();
 const jwt = require("jsonwebtoken");
+const { userAuth } = require("../middlewares/userAuth");
 
 // POST /signup API
 userRouter.post("/signup", async (req, res) => {
@@ -27,7 +32,7 @@ userRouter.post("/signup", async (req, res) => {
 // POST /login API
 userRouter.post("/login", async (req, res) => {
   try {
-    validateLoginData(req.body);
+    validateLoginData(req.body.email);
 
     const user = await User.findOne({ email: req.body.email });
     if (!user) {
@@ -73,7 +78,35 @@ userRouter.post("/login", async (req, res) => {
 
 userRouter.post("/logout", (req, res) => {
   res.clearCookie("token");
-  res.json({message: "Logged out successfully"})
+  res.json({ message: "Logged out successfully" });
+});
+
+userRouter.patch("/update/password", userAuth, async (req, res) => {
+  try {
+    const { user } = req;
+    const newPassword = req.body?.newPassword;
+    const currentPassword = req.body?.password;
+
+    validateUpdatePassword(newPassword);
+
+    const plainPasswordFromUser = currentPassword;
+    const hashPasswordFromDB = user.password;
+    const isPasswordMatched = await bcrypt.compare(
+      plainPasswordFromUser,
+      hashPasswordFromDB
+    );
+
+    if (!isPasswordMatched) {
+      throw new Error("Password not matched");
+    }
+    
+    const newHashPassword = await bcrypt.hash(newPassword, 10);
+    await User.updateOne({ _id: user._id }, { password: newHashPassword });
+
+    res.json({ message: "Password updated" });
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
 });
 
 module.exports = userRouter;
