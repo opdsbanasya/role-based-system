@@ -34,4 +34,17 @@ adminRouter.delete("/user/delete", userAuth, adminAuth, async (req, res) => {
   }
 });
 
+adminRouter.patch("/user/update", userAuth, adminAuth, async (req, res) => {
+  try {
+    const data = req.body;
+
+    const result = await User.updateOne({ _id: data._id }, { role: data.role });
+
+    res.json({message: "Role upadated"});
+
+  } catch (err) {
+    res.status(400).json(err.message);
+  }
+});
+
 module.exports = adminRouter;
