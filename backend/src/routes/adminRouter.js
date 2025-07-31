@@ -3,6 +3,7 @@ const { userAuth } = require("../middlewares/userAuth");
 const { adminAuth } = require("../middlewares/adminAuth");
 const { validateSignupData } = require("../utils/validate");
 const User = require("../models/user");
+const userRouter = require("./userRouter");
 
 const adminRouter = express.Router();
 
@@ -40,10 +41,26 @@ adminRouter.patch("/user/update", userAuth, adminAuth, async (req, res) => {
 
     const result = await User.updateOne({ _id: data._id }, { role: data.role });
 
-    res.json({message: "Role upadated"});
-
+    res.json({ message: "Role upadated" });
   } catch (err) {
     res.status(400).json(err.message);
+  }
+});
+
+adminRouter.get("/user/getlist", userAuth, adminAuth, async (req, res) => {
+  try {
+    const admin = req.user;
+    const userList = await User.find({
+      $and: [
+        { $or: [{ role: "student" }, { role: "admin" }] },
+        { id: { $ne: admin._id } },
+      ],
+    }).select("fisrtName lastName email role profilePhoto");
+    
+
+    res.json(userList);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
   }
 });
 
