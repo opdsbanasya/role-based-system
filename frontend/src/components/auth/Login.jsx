@@ -2,30 +2,38 @@ import { useState } from "react";
 import { loginAPI } from "../../utills/api";
 import { Link, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { useDispatch } from "react-redux";
+import { addUser } from "../../store/userSlice";
 
 const Login = () => {
   const [form, setForm] = useState({ email: "", password: "" });
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    const res = await loginAPI(form);
-    if (res.token) {
-      localStorage.setItem("token", res.token);
-      const decoded = jwtDecode(res.token);
-      if (decoded.role === "admin") {
-        navigate("/admin");
-      } else {
-        navigate("/welcome");
+    try {
+      e.preventDefault();
+      const res = await loginAPI(form);
+      if (res?.status === 200) {
+        console.log(res?.data?.userData);
+        dispatch(addUser(res?.data?.userData));
+        alert(res?.data?.message);
+        navigate("welcome");
       }
-    } else {
-      alert(res.message || "Login failed");
+    } catch (error) {
+      alert(
+        "login failed: " +
+          (error?.response?.data?.message || error.message || "Unknown error")
+      );
     }
   };
 
   return (
     <div className="h-screen flex justify-center items-center bg-gray-100">
-      <form className="bg-white p-6 rounded shadow-md w-96" onSubmit={handleSubmit}>
+      <form
+        className="bg-white p-6 rounded shadow-md w-96"
+        onSubmit={handleSubmit}
+      >
         <h2 className="text-2xl mb-4 font-bold text-center">Login</h2>
 
         <input
@@ -44,16 +52,20 @@ const Login = () => {
           required
         />
 
-        <button className="bg-green-500 text-white px-4 py-2 w-full" type="submit">
+        <button
+          className="bg-green-500 text-white px-4 py-2 w-full"
+          type="submit"
+        >
           Login
         </button>
 
         <div className="text-sm text-center mt-4 space-y-1">
           <p>
             Don&apos;t have an account?{" "}
-            <Link to="/signup" className="text-blue-600 hover:underline">Signup</Link>
+            <Link to="/signup" className="text-blue-600 hover:underline">
+              Signup
+            </Link>
           </p>
-          
         </div>
       </form>
     </div>

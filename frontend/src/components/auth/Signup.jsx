@@ -8,12 +8,14 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await signupAPI(form);
-    if (res.token) {
-      localStorage.setItem("token", res.token);
-      navigate("/welcome");
-    } else {
-      alert(res.message || "Signup failed");
+    try {
+      const res = await signupAPI(form);
+      if (res.status === 200) {
+        alert(res?.data?.message);
+        navigate("/");
+      }
+    } catch (error) {
+      alert("Signup failed: " + (error?.response?.data?.message || error.message || "Unknown error"));
     }
   };
 
