@@ -39,11 +39,14 @@ export const updateUserAPI = async (id, data) => {
 };
 
 export const deleteUserAPI = async (id) => {
-  const res = await axios.delete(`${BASE_URL}/user/delete`, { userId: id }, {withCredentials: true});
+  const res = await axios.delete(`${BASE_URL}/user/delete`, {
+    data: { _id: id },
+    withCredentials: true
+  });
   return res.data;
 };
 
 export const updateUserRoleAPI = async (id, data) => {
-  const res = await axios.patch(`${BASE_URL}/user/update`, data, {withCredentials: true})
+  const res = await axios.patch(`${BASE_URL}/user/update`, { _id: id, ...data }, {withCredentials: true})
   return res.data;
 };

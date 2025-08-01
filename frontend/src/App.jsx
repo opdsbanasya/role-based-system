@@ -16,6 +16,7 @@ import NotFound from "./components/NotFound";
 import Layout from "./components/Layout";
 import appStore from "./store/appStore";
 import { Provider } from "react-redux";
+import AddUser from "./components/admin/AddUser";
 
 const App = () => {
   return (
@@ -29,6 +30,7 @@ const App = () => {
 
             <Route path="welcome" element={<Welcome />} />
             <Route path="update-password" element={<UpdatePassword />} />
+            <Route path="add-user" element={<AddUser />} />
 
             <Route path="admin" element={<AdminDashboard />} />
 
