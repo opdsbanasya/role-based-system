@@ -53,8 +53,7 @@ adminRouter.get("/user/getlist", userAuth, adminAuth, async (req, res) => {
         { $or: [{ role: "student" }, { role: "admin" }] },
         { id: { $ne: admin._id } },
       ],
-    }).select("fisrtName lastName email role profilePhoto");
-    
+    }).select("firstName lastName email role profilePhoto");
 
     res.json(userList);
   } catch (err) {
