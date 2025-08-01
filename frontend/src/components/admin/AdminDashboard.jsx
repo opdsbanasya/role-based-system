@@ -4,7 +4,7 @@ import {
   deleteUserAPI,
   updateUserRoleAPI,
 } from "../../utills/api";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const AdminDashboard = () => {
@@ -64,6 +64,7 @@ const AdminDashboard = () => {
       <div className="flex items-center justify-between pb-4">
         <h1 className="text-2xl font-bold mb-4">Admin Dashboard</h1>
         <div className="flex items-center gap-5">
+          {user?.role === "admin" && <h2 className="font-semibold">{user?.firstName} {user?.lastName}</h2>}
           <button
             type="button"
             onClick={() => navigate("/add-user")}
@@ -71,7 +72,7 @@ const AdminDashboard = () => {
           >
             Add User
           </button>
-          {user?.role === "admin" && <h2 className="font-semibold">{user?.firstName} {user?.lastName}</h2>}
+          <Link to="/welcome" className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">Go to Home</Link>
         </div>
       </div>
 

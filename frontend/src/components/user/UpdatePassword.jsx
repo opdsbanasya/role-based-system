@@ -8,27 +8,6 @@ const UpdatePassword = () => {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-    try {
-      const res = await fetch("https://your-api.com/update-password", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify(form),
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        setMessage("Password updated successfully!");
-      } else {
-        setMessage(data.message || "Error updating password");
-      }
-    } catch (error) {
-      console.error(error);
-      setMessage("Something went wrong");
-    }
   };
 
   return (
