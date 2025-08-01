@@ -51,7 +51,7 @@ adminRouter.get("/user/getlist", userAuth, adminAuth, async (req, res) => {
     const userList = await User.find({
       $and: [
         { $or: [{ role: "student" }, { role: "admin" }] },
-        { id: { $ne: admin._id } },
+        { _id: { $ne: admin._id } },
       ],
     }).select("firstName lastName email role profilePhoto");
 
