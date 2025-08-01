@@ -1,1 +1,23 @@
-Role Based System
+# Role Based System
+
+A role-based access control system built using **Node.js**, **Express**, **MongoDB**, and **React**. This project implements secure user authentication and dynamic authorization based on user roles `admin`, `student`.
+
+---
+
+## Features
+
+- User authentication (Login/Signup)
+- Role-based access control
+- Admin & user management
+- Protected routes based on roles
+- RESTful API backend
+
+---
+
+## Tech Stack
+
+- **Backend**: Node.js, Express.js
+- **Database**: MongoDB (Mongoose)
+- **Frontend**: React.js
+- **Authentication**: JWT (JSON Web Token)
+- **Tools**: Nodemon, Dotenv
