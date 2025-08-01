@@ -14,60 +14,29 @@ import Welcome from "./components/user/Welcome";
 import AdminDashboard from "./components/admin/AdminDashboard";
 import NotFound from "./components/NotFound";
 import Layout from "./components/Layout";
-
-const PrivateRoute = ({ children, role }) => {
-  const token = localStorage.getItem("token");
-  if (!token) {
-    return <Navigate to="/login" />;
-  }
-
-  const decoded = jwtDecode(token);
-  if (role && decoded.role !== role) {
-    return <Navigate to="/unauthorized" />;
-  }
-
-  return children;
-};
+import appStore from "./store/appStore";
+import { Provider } from "react-redux";
 
 const App = () => {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Login />} />
-          <Route path="signup" element={<Signup />} />
-          <Route path="forget-password" element={<ForgetPassword />} />
+      <Provider store={appStore}>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route path="" element={<Login />} />
+            <Route path="signup" element={<Signup />} />
+            <Route path="forget-password" element={<ForgetPassword />} />
 
-          <Route
-            path="welcome"
-            element={
-              <PrivateRoute>
-                <Welcome />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="update-password"
-            element={
-              <PrivateRoute>
-                <UpdatePassword />
-              </PrivateRoute>
-            }
-          />
+            <Route path="welcome" element={<Welcome />} />
+            <Route path="update-password" element={<UpdatePassword />} />
 
-          <Route
-            path="admin"
-            element={
-              <PrivateRoute role="admin">
-                <AdminDashboard />
-              </PrivateRoute>
-            }
-          />
+            <Route path="admin" element={<AdminDashboard />} />
 
-          <Route path="unauthorized" element={<div>Unauthorized</div>} />
-          <Route path="*" element={<NotFound />} />
-        </Route>
-      </Routes>
+            <Route path="unauthorized" element={<div>Unauthorized</div>} />
+            <Route path="*" element={<NotFound />} />
+          </Route>
+        </Routes>
+      </Provider>
     </BrowserRouter>
   );
 };
