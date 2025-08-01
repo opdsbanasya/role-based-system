@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const UpdatePassword = () => {
@@ -25,7 +25,8 @@ const UpdatePassword = () => {
       } else {
         setMessage(data.message || "Error updating password");
       }
-    } catch (err) {
+    } catch (error) {
+      console.error(error);
       setMessage("Something went wrong");
     }
   };

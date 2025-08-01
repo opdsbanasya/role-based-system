@@ -1,8 +1,11 @@
-import React from "react";
+
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 const Welcome = () => {
   const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+  const decoded = jwtDecode(token);
 
   const logout = () => {
     localStorage.removeItem("token");
@@ -15,6 +18,9 @@ const Welcome = () => {
         <h1 className="text-3xl font-bold mb-4">Welcome!</h1>
         <p className="mb-4">You are logged in successfully.</p>
         <button onClick={() => navigate("/update-password")} className="bg-blue-500 text-white px-4 py-2 mr-2">Update Password</button>
+        {decoded.role === "admin" && (
+          <button onClick={() => navigate("/admin")} className="bg-purple-500 text-white px-4 py-2 mr-2">Admin Dashboard</button>
+        )}
         <button onClick={logout} className="bg-red-500 text-white px-4 py-2">Logout</button>
       </div>
     </div>

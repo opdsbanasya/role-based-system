@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import { loginAPI } from "./api";
+import { useState } from "react";
+import { loginAPI } from "../../utills/api";
 import { Link, useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 const Login = () => {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -11,7 +12,12 @@ const Login = () => {
     const res = await loginAPI(form);
     if (res.token) {
       localStorage.setItem("token", res.token);
-      navigate("/welcome");
+      const decoded = jwtDecode(res.token);
+      if (decoded.role === "admin") {
+        navigate("/admin");
+      } else {
+        navigate("/welcome");
+      }
     } else {
       alert(res.message || "Login failed");
     }
@@ -42,18 +48,12 @@ const Login = () => {
           Login
         </button>
 
-        {/* Extra links */}
         <div className="text-sm text-center mt-4 space-y-1">
           <p>
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <Link to="/signup" className="text-blue-600 hover:underline">Signup</Link>
           </p>
-          <p>
-            <Link to="/forget-password" className="text-red-500 hover:underline">Forgot Password?</Link>
-          </p>
-          <p>
-            <Link to="/update-password" className="text-purple-600 hover:underline">Update Password</Link>
-          </p>
+          
         </div>
       </form>
     </div>

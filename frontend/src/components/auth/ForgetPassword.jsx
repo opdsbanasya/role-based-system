@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const ForgetPassword = () => {
@@ -23,7 +23,8 @@ const ForgetPassword = () => {
       } else {
         setMessage(data.message || "Error sending email.");
       }
-    } catch (err) {
+    } catch (error) {
+      console.error(error);
       setMessage("Something went wrong.");
     }
   };
